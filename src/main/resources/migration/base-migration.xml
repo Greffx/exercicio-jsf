@@ -1,0 +1,71 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="01" author="EG"
+               labels="criação das tabelas e suas cardinalidades">
+        <createTable tableName="evento">
+            <column name="evento_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="nome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="data_inicial" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_fim" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="participante">
+            <column name="participante_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="nome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="cpf" type="VARCHAR(14)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="evento_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="presenca">
+            <column name="presenca_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="data" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="participante_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_presenca_participante"
+                baseTableName="presenca"
+                baseColumnNames="participante_id" referencedTableName="participante"
+                referencedColumnNames="participante_id" onDelete="CASCADE"
+        />
+        <addForeignKeyConstraint
+                constraintName="fk_participante_evento"
+                baseTableName="participante"
+                baseColumnNames="evento_id" referencedTableName="evento"
+                referencedColumnNames="evento_id" onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>
