@@ -14,34 +14,40 @@
             <!-- Cabeçalho -->
             <div class="nav-header">
                 <h1>Eventos</h1>
-                <p:commandButton value="Cadastrar novo"
-                                 action="/pages/cadastrarEvento.xhtml?faces-redirect=true"
-                                 ajax="false"
-                                 styleClass="home-save-button"
+                <p:button value="Cadastrar novo"
+                          outcome="/pages/cadastrarEvento.xhtml?faces-redirect=true"
+                          target="_blank"
+                          ajax="false"
+                          styleClass="home-save-button"
                 />
             </div>
 
-            <!-- Tabela Filtros -->
             <div class="filter-section">
-                <p:panelGrid columns="4" styleClass="filter-grid">
-                    <p:outputLabel value="Nome:"/>
-                    <p:inputText value="#{eventoMBean.nome}"/>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <p:outputLabel value="Nome:"/>
+                        <p:inputText value="#{eventoMBean.evento.nome}" styleClass="filter-input"/>
+                    </div>
 
-                    <p:outputLabel value="Data Inicial:"/>
-                    <p:datePicker value="#{eventoMBean.dataInicial}"
-                                  pattern="dd/MM/yyyy"
-                    />
-                    <p:outputLabel value="Data Final:"/>
-                    <p:datePicker value="#{eventoMBean.dataFim}"
-                                  pattern="dd/MM/yyyy"
-                    />
+                    <div class="filter-group">
+                        <p:outputLabel value="Data Inicial:"/>
+                        <p:datePicker value="#{eventoMBean.evento.dataInicial}"
+                                      pattern="dd/MM/yyyy"
+                                      styleClass="filter-input"/>
+                    </div>
+
+                    <div class="filter-group">
+                        <p:outputLabel value="Data Final:"/>
+                        <p:datePicker value="#{eventoMBean.evento.dataFim}"
+                                      pattern="dd/MM/yyyy"
+                                      styleClass="filter-input"/>
+                    </div>
 
                     <p:commandButton value="Pesquisar"
                                      action="#{eventoMBean.listar()}"
                                      update="tabela-eventos"
-                                     styleClass="search-button"
-                    />
-                </p:panelGrid>
+                                     styleClass="search-button"/>
+                </div>
             </div>
 
             <p:dataTable id="tabela-eventos"
@@ -69,17 +75,17 @@
                     <h:outputText value="#{eventoDto.duracaoEvento} dias"/>
                 </p:column>
 
-                <!--BOTÕES DE ALTERAÇÃO DO EVENTO-->
-                <p:column headerText="Editar" styleClass="head-text">
-                    <p:commandButton icon="pi pi-pencil" title="Editar"
-                                     action="/pages/cadastrarEvento.xhtml?faces-redirect=true"
-                    />
-                </p:column>
+                <p:column>
+                    <p:button icon="pi pi-pencil"
+                              outcome="/pages/cadastrarEvento.xhtml?faces-redirect=true"
+                              style="margin-right: 2%;">
 
-                <p:column headerText="Excluir" styleClass="head-text">
+                        <f:param name="id" value="#{eventoDto.id}"/>
+                    </p:button>
+
                     <p:commandButton icon="pi pi-trash" title="Excluir"
                                      action="#{eventoMBean.deletar(eventoDto.id)}"
-                                     update="@form"
+                                     update="tabela-eventos"
                                      styleClass="ui-button-danger"
                                      onclick="return confirm('Tem certeza que deseja excluir este evento?');"
                     />

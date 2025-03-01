@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -32,45 +31,47 @@ public class EventoMBean implements Serializable {
 
     private Evento evento;
     private List<EventoDTO> eventosDto;
-    private String nome;
-    private LocalDate dataInicial;
-    private LocalDate dataFim;
 
     @PostConstruct
     public void init() {
-        evento = new Evento();
+        var facesContext = FacesContext.getCurrentInstance();
+        var idParam = facesContext.getExternalContext().getRequestParameterMap().get("id");
+
+        if (idParam != null) {
+            var id = Long.valueOf(idParam);
+            evento = eventoService.buscarPorId(id);
+        } else {
+            evento = new Evento();
+        }
         eventosDto = EventoDTO.toDTO(eventoService.listar(null, null, null));
     }
 
-    public String salvar() {
+    public void salvar() {
         try {
             if (evento.getId() == null) {
-                eventoService.salvar(evento);
+                evento = eventoService.salvar(evento);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
                                 "Evento cadastrado com sucesso!"));
             } else {
-                eventoService.editar(evento.getId());
+                evento = eventoService.editar(evento.getId(), evento);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
                                 "Evento atualizado com sucesso!"));
             }
-
-            return null;
         } catch (BusinessException exc) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", exc.getMessage()));
-
-            return null;
         }
     }
 
     public void listar() {
-        eventosDto = EventoDTO.toDTO(eventoService.listar(nome, dataInicial, dataFim));
+        eventosDto = EventoDTO.toDTO(eventoService.listar(evento.getNome(), evento.getDataInicial(), evento.getDataFim()));
     }
 
     public void deletar(Long id) {
         eventoService.excluir(id);
+        listar();
     }
 
 }

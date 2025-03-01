@@ -10,17 +10,18 @@
 </h:head>
 
 <h:body>
-    <div class="container-registro">
+    <div class="container">
         <div class="header">Detalhes Evento</div>
 
         <h:form id="eventoForm">
-            <p:messages id="messages" showDetail="true" closable="true"/> <!--mostrar mensagens de error -->
+            <p:messages id="messages" showDetail="true" closable="true"/>
 
-            <p:tabView id="tabView">
+            <p:tabView id="tabView" widgetVar="tabViewWidget" dynamic="true">
                 <p:tab title="Dados Evento" id="dadosTab">
                     <div class="form-field">
                         <h:outputLabel value="Nome: *" styleClass="form-label"/>
                         <p:inputText id="nome"
+                                     styleClass="form-field"
                                      value="#{eventoMBean.evento.nome}"
                                      required="true"
                                      requiredMessage="Nome é obrigatório"/>
@@ -30,6 +31,7 @@
                     <div class="form-field">
                         <h:outputLabel value="Data Inicial: *" styleClass="form-label"/>
                         <p:calendar id="dataInicial"
+                                    styleClass="form-field"
                                     value="#{eventoMBean.evento.dataInicial}"
                                     required="true"
                                     requiredMessage="Data Inicial é obrigatória"
@@ -40,6 +42,7 @@
                     <div class="form-field">
                         <h:outputLabel value="Data Final: *" styleClass="form-label"/>
                         <p:calendar id="dataFim"
+                                    styleClass="form-field"
                                     value="#{eventoMBean.evento.dataFim}"
                                     required="true"
                                     requiredMessage="Data Final é obrigatória"
@@ -52,11 +55,27 @@
                                          actionListener="#{eventoMBean.salvar()}"
                                          update="eventoForm messages"
                                          validateClient="true"
+                                         oncomplete="PF('tabViewWidget').select(0);"
                                          styleClass="save-button"/>
                     </div>
                 </p:tab>
 
-                <p:tab title="Participantes" id="participantesTab" disabled="#{!eventoMBean.evento.id}"/>
+                <p:tab title="Participantes" id="participantesTab" disabled="#{eventoMBean.evento.id == null}">
+                    <p:dataTable id="tabela-eventos"
+                                 value="#{eventoMBean.eventosDto}"
+                                 var="eventoDto"
+                                 styleClass="event-table"
+                                 emptyMessage="Nenhum evento encontrado">
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{eventoDto.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Duração">
+                            <h:outputText value="#{eventoDto.duracaoEvento} dias"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
             </p:tabView>
         </h:form>
     </div>

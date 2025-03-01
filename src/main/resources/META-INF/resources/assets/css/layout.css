@@ -20,21 +20,21 @@
 .container-registro {
     width: 40%;
     border: 1px solid black;
-    margin: 20px;
-    padding: 20px;
+    margin: 2%;
+    padding: 2%;
 }
 
 .container-home {
     width: 80%;
     border: 1px solid black;
-    margin: 20px;
-    padding: 20px;
+    margin: 2%;
+    padding: 2%;
 }
 /* Cabeçalho */
 .header {
     font-size: 20px;
     font-weight: bolder;
-    margin-bottom: 20px;
+    margin-bottom: 2%;
 }
 
 /* tabelas */
@@ -52,12 +52,12 @@
 }
 
 .ui-tabs .ui-tabs-nav li a {
-    padding: 5px 15px !important;
+    padding: 5% 1.5% !important;
     color: black !important;
 }
 
 .ui-tabs .ui-tabs-panels {
-    padding: 20px 0 !important;
+    padding: 2% 0 !important;
     border: none !important;
 }
 
@@ -65,27 +65,31 @@
 .ui-datepicker {
     background-color: white !important;
     border: 1px solid #aaa;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Form */
 .form-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-weight: bolder;
-    margin-left: 150px;
-    margin-bottom: 15px;
+    margin-bottom: 1%;
 }
 
 .form-label {
-    display: block;
-    margin-bottom: 5px;
+    width: 30%;
+    text-align: left;
 }
 
 /* campos de entrada */
 .ui-inputtext, input {
     font-weight: bolder;
-    width: 68% !important;
-    padding: 5px !important;
+    width: 30% !important;
+    padding: 0.2% !important;
     border: 1px solid black !important;
     border-radius: 0 !important;
     background: white !important;
@@ -95,7 +99,7 @@
 /* botão */
 .button-container {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 2%;
 }
 
 .save-button, .home-save-button,
@@ -109,8 +113,8 @@
 }
 
 .save-button {
-    width: 40%;
-    padding: 5px 20px !important;
+    width: 20%;
+    padding: 0.5% 2% !important;
     margin: 0 auto !important;
 }
 
@@ -119,23 +123,40 @@
 }
 
 .home-save-button {
-    width: 15%;
+    width: 10%;
 }
 
 .search-button {
     width: 50%;
 }
 
-/* filters section */
 .filter-section {
     background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    padding: 2%;
+    border-radius: 0.8%;
+    margin-bottom: 2%;
 }
 
-.filter-grid td {
-    padding: 8px;
+.filter-grid {
+    display: flex;
+    gap: 1.6%;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8%;
+}
+
+.filter-input {
+    width: 15%;
+}
+
+.search-button {
+    width: 10%;
+    margin-left: auto;
 }
 
 /* tabela de evento */
@@ -147,18 +168,18 @@
 .event-table th {
     background-color: white;
     color: black;
-    padding: 12px;
+    padding: 1.2%;
     text-align: left;
 }
 
 .event-table td {
-    padding: 10px;
+    padding: 2%;
     border-bottom: 1px solid #eee;
 }
 
 .dialog-footer {
     text-align: right;
-    margin-top: 20px;
+    margin-top: 2%;
 }
 
 

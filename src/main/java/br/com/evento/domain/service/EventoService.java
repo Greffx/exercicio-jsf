@@ -11,7 +11,7 @@ public interface EventoService {
 
     boolean excluir(Long id);
 
-    Evento editar(Long id);
+    Evento editar(Long id, Evento eventoNovo);
 
     List<Evento> listar(String nome, LocalDate dataInicio, LocalDate dataFim);
 

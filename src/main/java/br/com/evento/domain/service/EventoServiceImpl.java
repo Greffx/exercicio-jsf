@@ -18,6 +18,9 @@ public class EventoServiceImpl implements EventoService {
     @Autowired
     private EventoRepository eventoRepository;
 
+    private static final String MSG_EVENTO_NOT_FOUND =
+            "Evento não encontrado com esse ID.";
+
     @Transactional
     @Override
     public Evento salvar(Evento evento) {
@@ -38,7 +41,7 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public boolean excluir(Long id) {
         var evento = eventoRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Evento não encontrado com esse ID."));
+                .orElseThrow(() -> new BusinessException(MSG_EVENTO_NOT_FOUND));
 
         try {
             eventoRepository.delete(evento);
@@ -52,11 +55,17 @@ public class EventoServiceImpl implements EventoService {
         }
     }
 
-    //TODO: fazer depois, talvez usar um mapStruct aqui, ou fazer algo mais simplificado
     @Transactional
     @Override
-    public Evento editar(Long id) {
-        return null;
+    public Evento editar(Long id, Evento eventoNovo) {
+        var eventoAtual = eventoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(MSG_EVENTO_NOT_FOUND));
+
+        eventoAtual.setNome(eventoNovo.getNome());
+        eventoAtual.setDataInicial(eventoNovo.getDataInicial());
+        eventoAtual.setDataFim(eventoNovo.getDataFim());
+
+        return this.salvar(eventoAtual);
     }
 
     @Override
@@ -67,6 +76,6 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public Evento buscarPorId(Long id) {
         return eventoRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Evento não encontrado com esse ID."));
+                .orElseThrow(() -> new BusinessException(MSG_EVENTO_NOT_FOUND));
     }
 }
