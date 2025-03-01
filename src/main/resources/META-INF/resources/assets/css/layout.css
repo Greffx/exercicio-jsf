@@ -1,0 +1,162 @@
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* remoção de styles do faces */
+.ui-widget {
+    font-family: Arial, sans-serif !important;
+}
+
+.ui-widget-content,
+.ui-widget-header {
+    border: none !important;
+    background: none !important;
+}
+
+/* Container */
+.container-registro {
+    width: 40%;
+    border: 1px solid black;
+    margin: 20px;
+    padding: 20px;
+}
+
+.container-home {
+    width: 80%;
+    border: 1px solid black;
+    margin: 20px;
+    padding: 20px;
+}
+/* Cabeçalho */
+.header {
+    font-size: 20px;
+    font-weight: bolder;
+    margin-bottom: 20px;
+}
+
+/* tabelas */
+.ui-tabs .ui-tabs-nav {
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    border: 1px solid black !important;
+    background: white !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    padding: 5px 15px !important;
+    color: black !important;
+}
+
+.ui-tabs .ui-tabs-panels {
+    padding: 20px 0 !important;
+    border: none !important;
+}
+
+/* calendário */
+.ui-datepicker {
+    background-color: white !important;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form */
+.form-field {
+    font-weight: bolder;
+    margin-left: 150px;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* campos de entrada */
+.ui-inputtext,
+.ui-calendar input {
+    font-weight: bolder;
+    width: 68% !important;
+    padding: 5px !important;
+    border: 1px solid black !important;
+    border-radius: 0 !important;
+    background: white !important;
+    box-shadow: black !important;
+}
+
+/* botão */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.save-button {
+    width: 40%;
+    padding: 5px 20px !important;
+    background: white !important;
+    border: 1px solid black !important;
+    border-radius: 0 !important;
+    color: black !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+.save-button:hover {
+    background: white !important;
+}
+
+.home-save-button {
+    width: 15%;
+    background: white !important;
+    border: 1px solid black !important;
+    border-radius: 0 !important;
+    color: black !important;
+    box-shadow: none !important;
+    display: block !important;
+}
+
+/* filters section */
+.filter-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-grid td {
+    padding: 8px;
+}
+
+/* tabela de evento */
+.event-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.event-table th {
+    background-color: white;
+    color: black;
+    padding: 12px;
+    text-align: left;
+}
+
+.event-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.dialog-footer {
+    text-align: right;
+    margin-top: 20px;
+}
+

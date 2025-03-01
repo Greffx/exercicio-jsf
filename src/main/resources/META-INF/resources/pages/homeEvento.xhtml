@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Eventos</title>
+    <h:outputStylesheet name="assets/css/layout.css"/>
+</h:head>
+<!--TODO: BUG DE TELA, QUANDO CLICA ENTER, ELE VAI DIRETO PARA OUTRA TELA, VER ISSO-->
+<h:body>
+    <div class="container-home">
+        <h:form id="form">
+            <!-- Cabeçalho -->
+            <div class="nav-header">
+                <h1>Eventos</h1>
+                <p:commandButton value="Cadastrar novo"
+                                 action="/pages/cadastrarEvento.xhtml?faces-redirect=true"
+                                 ajax="false"
+                                 styleClass="home-save-button"
+                />
+            </div>
+
+            <!-- Tabela Filtros -->
+            <div class="filter-section">
+                <p:panelGrid columns="4" styleClass="filter-grid">
+                    <p:outputLabel value="Nome:"/>
+                    <p:inputText value="#{eventoMBean.nome}"/>
+
+                    <p:outputLabel value="Data Inicial:"/>
+                    <p:datePicker value="#{eventoMBean.dataInicial}"
+                                pattern="dd/MM/yyyy"
+                    />
+
+                    <p:outputLabel value="Data Final:"/>
+                    <p:datePicker value="#{eventoMBean.dataFim}"
+                                pattern="dd/MM/yyyy"
+                    />
+
+                    <p:commandButton value="Pesquisar"
+                                     action="#{eventoMBean.listar()}"
+                                     update="tabela-eventos"
+                                     styleClass="btn"/>
+                </p:panelGrid>
+            </div>
+
+            <p:dataTable id="tabela-eventos"
+                         value="#{eventoMBean.eventos}"
+                         var="evento"
+                         styleClass="event-table"
+                         emptyMessage="Nenhum evento encontrado">
+
+                <p:column headerText="Nome">
+                    <h:outputText value="#{evento.nome}"/>
+                </p:column>
+
+                <p:column headerText="Data Início">
+                    <h:outputText value="#{evento.dataInicial}">
+                        <f:converter converterId="dataConverter"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Data Fim">
+                    <h:outputText value="#{evento.dataFim}">
+                        <f:converter converterId="dataConverter"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sim" type="button"
+                                 styleClass="save-button"
+                                 onclick="PF('confirmDialog').hide();"/>
+                <p:commandButton value="Não" type="button"
+                                 styleClass="save-button"
+                                 onclick="PF('confirmDialog').hide();"/>
+            </p:confirmDialog>
+        </h:form>
+    </div>
+
+</h:body>
+</html>
