@@ -66,7 +66,8 @@ public class EventoMBean implements Serializable {
     }
 
     public void listar() {
-        eventosDto = EventoDTO.toDTO(eventoService.listar(evento.getNome(), evento.getDataInicial(), evento.getDataFim()));
+        eventosDto = EventoDTO.toDTO(
+                eventoService.listar(evento.getNome(), evento.getDataInicial(), evento.getDataFim()));
     }
 
     public void deletar(Long id) {

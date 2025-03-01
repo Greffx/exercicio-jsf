@@ -12,8 +12,8 @@
 
 .ui-widget-content,
 .ui-widget-header {
-    border: none !important;
-    background: none !important;
+    border: none;
+    background: none;
 }
 
 /* Container */
@@ -45,19 +45,19 @@
 }
 
 .ui-tabs .ui-tabs-nav li {
-    border: 1px solid black !important;
-    background: white !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
+    border: 1px solid black;
+    background: white;
+    margin: 0;
+    border-radius: 0;
 }
 
 .ui-tabs .ui-tabs-nav li a {
-    padding: 5% 1.5% !important;
-    color: black !important;
+    padding: 5% 1.5%;
+    color: black;
 }
 
 .ui-tabs .ui-tabs-panels {
-    padding: 2% 0 !important;
+    padding: 2% 0 ;
     border: none !important;
 }
 
@@ -88,12 +88,12 @@
 /* campos de entrada */
 .ui-inputtext, input {
     font-weight: bolder;
-    width: 30% !important;
-    padding: 0.2% !important;
-    border: 1px solid black !important;
-    border-radius: 0 !important;
-    background: white !important;
-    box-shadow: black !important;
+    width: 30%;
+    padding: 0.2%;
+    border: 1px solid black;
+    border-radius: 0;
+    background: white;
+    box-shadow: black;
 }
 
 /* botão */
@@ -116,6 +116,17 @@
     width: 20%;
     padding: 0.5% 2% !important;
     margin: 0 auto !important;
+}
+
+body .back-button {
+    border: none;;
+    box-shadow: none;
+    outline: none;;
+    background: white;
+    color: black;
+    width: 20%;
+    padding: 0.5% 2%;
+    margin: 0 auto;
 }
 
 .save-button:hover {

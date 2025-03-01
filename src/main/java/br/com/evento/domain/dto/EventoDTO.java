@@ -1,9 +1,6 @@
 package br.com.evento.domain.dto;
 
 import br.com.evento.domain.model.Evento;
-import br.com.evento.domain.model.Participante;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serial;
@@ -28,8 +25,6 @@ public class EventoDTO implements Serializable {
 
     /**APENAS EM DIAS*/
     private Long duracaoEvento;
-
-    private List<Participante> participantes = new ArrayList<>();
 
     public static List<EventoDTO> toDTO(List<Evento> eventos) {
         var eventosDTO = new ArrayList<EventoDTO>();

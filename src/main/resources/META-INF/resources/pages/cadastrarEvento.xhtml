@@ -57,28 +57,102 @@
                                          validateClient="true"
                                          oncomplete="PF('tabViewWidget').select(0);"
                                          styleClass="save-button"/>
+
+                        <p:button value="Voltar"
+                                  outcome="/pages/homeEvento.xhtml?faces-redirect=true"
+                                  styleClass="back-button"/>
                     </div>
                 </p:tab>
 
+
                 <p:tab title="Participantes" id="participantesTab" disabled="#{eventoMBean.evento.id == null}">
+                    <p:commandButton value="Adicionar participante"
+                                     styleClass="home-save-button"
+                                     onclick="PF('participanteDialog').show();"
+                                     type="button"
+                                     process="@this"/>
+
                     <p:dataTable id="tabela-eventos"
-                                 value="#{eventoMBean.eventosDto}"
-                                 var="eventoDto"
+                                 value="#{participanteMBean.participantesDto}"
+                                 var="participante"
                                  styleClass="event-table"
-                                 emptyMessage="Nenhum evento encontrado">
+                                 emptyMessage="Nenhum participante encontrado">
 
                         <p:column headerText="Nome">
-                            <h:outputText value="#{eventoDto.nome}"/>
+                            <h:outputText value="#{participante.nome}"/>
                         </p:column>
 
-                        <p:column headerText="Duração">
-                            <h:outputText value="#{eventoDto.duracaoEvento} dias"/>
+                        <p:column headerText="CPF">
+                            <h:outputText value="#{participante.cpf} dias"/>
+                        </p:column>
+
+                        <p:column headerText="E-mail">
+                            <h:outputText value="#{participante.email} dias"/>
+                        </p:column>
+
+                        <p:column headerText="% participação">
+                            <h:outputText value="#{participante.porcentagem} dias"/>
+                        </p:column>
+
+                        <p:column>
+                            <p:button icon="pi pi-pencil"
+                                      outcome="/pages/cadastrarEvento.xhtml?faces-redirect=true"
+                                      style="margin-right: 2%;">
+                            </p:button>
+
+                            <p:commandButton icon="pi pi-trash" title="Excluir"
+                                             action="#{eventoMBean.deletar(participante.id)}"
+                                             update="tabela-eventos"
+                                             styleClass="ui-button-danger"
+                                             onclick="return confirm('Tem certeza que deseja excluir este evento?');"/>
+                        </p:column>
+
+                        <p:column headerText="Adc. presença">
+                            <h:outputText value="#{participante.id} dias"/>
                         </p:column>
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
         </h:form>
+
+        <!-- Move dialog outside of the main form -->
+        <p:dialog id="participanteDialog" widgetVar="participanteDialog" header="Cadastrar Participante"
+                  modal="true" resizable="false" width="45%" appendTo="@(body)">
+            <h:form id="participanteForm">
+                <p:messages id="messagesParticipante" showDetail="true" closable="true"/>
+
+                <div class="form-field">
+                    <h:outputLabel for="nomeParticipante" value="Nome:"/>
+                    <p:inputText styleClass="" id="nomeParticipante"
+                                 value="#{participanteMBean.participantesDto.nome}"
+                                 required="true"
+                                 requiredMessage="Nome é obrigatório"/>
+                </div>
+
+                <div class="form-field">
+                    <h:outputLabel for="cpfParticipante" value="CPF:"/>
+                    <p:inputMask styleClass="input-modal" id="cpfParticipante"
+                                 value="#{participanteMBean.participantesDto.cpf}"
+                                 mask="999.999.999-99"
+                                 required="true"
+                                 requiredMessage="CPF é obrigatório"/>
+                </div>
+
+                <div class="form-field">
+                    <h:outputLabel for="emailParticipante" value="E-mail:"/>
+                    <p:inputText styleClass="input-modal" id="emailParticipante"
+                                 value="#{participanteMBean.participantesDto.email}"
+                                 required="true"
+                                 requiredMessage="E-mail é obrigatório"/>
+                </div>
+
+                <p:commandButton value="Salvar" icon="pi pi-check"
+                                 action="#{participanteMBean.salvar()}"
+                                 update=":eventoForm:tabView:tabela-eventos messagesParticipante"
+                                 oncomplete="if(!args.validationFailed) PF('participanteDialog').hide();"/>
+            </h:form>
+        </p:dialog>
     </div>
 </h:body>
-
 </html>
+

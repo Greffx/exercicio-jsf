@@ -18,8 +18,7 @@
                           outcome="/pages/cadastrarEvento.xhtml?faces-redirect=true"
                           target="_blank"
                           ajax="false"
-                          styleClass="home-save-button"
-                />
+                          styleClass="home-save-button"/>
             </div>
 
             <div class="filter-section">
@@ -87,8 +86,7 @@
                                      action="#{eventoMBean.deletar(eventoDto.id)}"
                                      update="tabela-eventos"
                                      styleClass="ui-button-danger"
-                                     onclick="return confirm('Tem certeza que deseja excluir este evento?');"
-                    />
+                                     onclick="return confirm('Tem certeza que deseja excluir este evento?');"/>
                 </p:column>
             </p:dataTable>
         </h:form>

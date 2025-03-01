@@ -18,7 +18,7 @@ public class EventoServiceImpl implements EventoService {
     @Autowired
     private EventoRepository eventoRepository;
 
-    private static final String MSG_EVENTO_NOT_FOUND =
+    private static final String MSG_NOT_FOUND =
             "Evento não encontrado com esse ID.";
 
     @Transactional
@@ -40,8 +40,7 @@ public class EventoServiceImpl implements EventoService {
     @Transactional
     @Override
     public boolean excluir(Long id) {
-        var evento = eventoRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(MSG_EVENTO_NOT_FOUND));
+        var evento = this.buscarPorId(id);
 
         try {
             eventoRepository.delete(evento);
@@ -59,7 +58,7 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public Evento editar(Long id, Evento eventoNovo) {
         var eventoAtual = eventoRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(MSG_EVENTO_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(MSG_NOT_FOUND));
 
         eventoAtual.setNome(eventoNovo.getNome());
         eventoAtual.setDataInicial(eventoNovo.getDataInicial());
@@ -76,6 +75,6 @@ public class EventoServiceImpl implements EventoService {
     @Override
     public Evento buscarPorId(Long id) {
         return eventoRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(MSG_EVENTO_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(MSG_NOT_FOUND));
     }
 }
