@@ -29,54 +29,63 @@
 
                     <p:outputLabel value="Data Inicial:"/>
                     <p:datePicker value="#{eventoMBean.dataInicial}"
-                                pattern="dd/MM/yyyy"
+                                  pattern="dd/MM/yyyy"
                     />
-
                     <p:outputLabel value="Data Final:"/>
                     <p:datePicker value="#{eventoMBean.dataFim}"
-                                pattern="dd/MM/yyyy"
+                                  pattern="dd/MM/yyyy"
                     />
 
                     <p:commandButton value="Pesquisar"
                                      action="#{eventoMBean.listar()}"
                                      update="tabela-eventos"
-                                     styleClass="btn"/>
+                                     styleClass="search-button"
+                    />
                 </p:panelGrid>
             </div>
 
             <p:dataTable id="tabela-eventos"
-                         value="#{eventoMBean.eventos}"
-                         var="evento"
+                         value="#{eventoMBean.eventosDto}"
+                         var="eventoDto"
                          styleClass="event-table"
                          emptyMessage="Nenhum evento encontrado">
 
                 <p:column headerText="Nome">
-                    <h:outputText value="#{evento.nome}"/>
+                    <h:outputText value="#{eventoDto.nome}"/>
                 </p:column>
 
                 <p:column headerText="Data Início">
-                    <h:outputText value="#{evento.dataInicial}">
+                    <h:outputText value="#{eventoDto.dataInicial}">
+                        <f:converter converterId="dataConverter"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Data Fim">
+                    <h:outputText value="#{eventoDto.dataFim}">
                         <f:converter converterId="dataConverter"/>
                     </h:outputText>
                 </p:column>
 
-                <p:column headerText="Data Fim">
-                    <h:outputText value="#{evento.dataFim}">
-                        <f:converter converterId="dataConverter"/>
-                    </h:outputText>
+                <p:column headerText="Duração">
+                    <h:outputText value="#{eventoDto.duracaoEvento} dias"/>
+                </p:column>
+
+                <!--BOTÕES DE ALTERAÇÃO DO EVENTO-->
+                <p:column headerText="Editar" styleClass="head-text">
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                     action="/pages/cadastrarEvento.xhtml?faces-redirect=true"
+                    />
+                </p:column>
+
+                <p:column headerText="Excluir" styleClass="head-text">
+                    <p:commandButton icon="pi pi-trash" title="Excluir"
+                                     action="#{eventoMBean.deletar(eventoDto.id)}"
+                                     update="@form"
+                                     styleClass="ui-button-danger"
+                                     onclick="return confirm('Tem certeza que deseja excluir este evento?');"
+                    />
                 </p:column>
             </p:dataTable>
-
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Sim" type="button"
-                                 styleClass="save-button"
-                                 onclick="PF('confirmDialog').hide();"/>
-                <p:commandButton value="Não" type="button"
-                                 styleClass="save-button"
-                                 onclick="PF('confirmDialog').hide();"/>
-            </p:confirmDialog>
         </h:form>
     </div>
-
 </h:body>
 </html>

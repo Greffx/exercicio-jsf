@@ -1,5 +1,6 @@
 package br.com.evento.rest.action;
 
+import br.com.evento.domain.dto.EventoDTO;
 import br.com.evento.domain.exception.BusinessException;
 import br.com.evento.domain.model.Evento;
 import br.com.evento.domain.service.EventoService;
@@ -30,7 +31,7 @@ public class EventoMBean implements Serializable {
     private EventoService eventoService;
 
     private Evento evento;
-    private List<Evento> eventos;
+    private List<EventoDTO> eventosDto;
     private String nome;
     private LocalDate dataInicial;
     private LocalDate dataFim;
@@ -38,7 +39,7 @@ public class EventoMBean implements Serializable {
     @PostConstruct
     public void init() {
         evento = new Evento();
-        eventos = eventoService.listar( null, null, null);
+        eventosDto = EventoDTO.toDTO(eventoService.listar(null, null, null));
     }
 
     public String salvar() {
@@ -65,7 +66,11 @@ public class EventoMBean implements Serializable {
     }
 
     public void listar() {
-        eventos = eventoService.listar(nome, dataInicial, dataFim);
+        eventosDto = EventoDTO.toDTO(eventoService.listar(nome, dataInicial, dataFim));
+    }
+
+    public void deletar(Long id) {
+        eventoService.excluir(id);
     }
 
 }

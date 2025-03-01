@@ -82,8 +82,7 @@
 }
 
 /* campos de entrada */
-.ui-inputtext,
-.ui-calendar input {
+.ui-inputtext, input {
     font-weight: bolder;
     width: 68% !important;
     padding: 5px !important;
@@ -99,16 +98,20 @@
     margin-top: 20px;
 }
 
-.save-button {
-    width: 40%;
-    padding: 5px 20px !important;
+.save-button, .home-save-button,
+.search-button  {
     background: white !important;
     border: 1px solid black !important;
     border-radius: 0 !important;
     color: black !important;
     box-shadow: none !important;
-    margin: 0 auto !important;
     display: block !important;
+}
+
+.save-button {
+    width: 40%;
+    padding: 5px 20px !important;
+    margin: 0 auto !important;
 }
 
 .save-button:hover {
@@ -117,12 +120,10 @@
 
 .home-save-button {
     width: 15%;
-    background: white !important;
-    border: 1px solid black !important;
-    border-radius: 0 !important;
-    color: black !important;
-    box-shadow: none !important;
-    display: block !important;
+}
+
+.search-button {
+    width: 50%;
 }
 
 /* filters section */
@@ -160,3 +161,7 @@
     margin-top: 20px;
 }
 
+
+.head-text {
+    text-align: center;
+}
