@@ -24,10 +24,23 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     @Transactional
     @Override
     public Participante salvar(Long eventoId, Participante participante) {
+        if (participante.getNome() == null) {
+            throw new BusinessException("Nome obrigatório.");
+        }
+
+        if (participante.getCpf() == null) {
+            throw new BusinessException("CPF obrigatório.");
+        }
+
+        if (participante.getEmail() == null) {
+            throw new BusinessException("E-mail obrigatório.");
+        }
+
+        participante.setEventoId(eventoId);
         var participantes = participanteRepository.findByEvento(eventoId);
 
         //verificação de CPF
-        if (participantes == null && !participantes.isEmpty()) {
+        if (participantes != null && !participantes.isEmpty()) {
             for (var part : participantes)
                 if (part.getCpf().equals(participante.getCpf()))
                     throw new BusinessException("CPF inválido.");

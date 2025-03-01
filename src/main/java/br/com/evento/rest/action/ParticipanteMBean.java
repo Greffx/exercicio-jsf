@@ -33,13 +33,18 @@ public class ParticipanteMBean implements Serializable {
     private Participante participante;
     private List<ParticipanteDTO> participantesDto = new ArrayList<>();
     private Long eventoId;
-
+    private ParticipanteDTO participanteDto;
 
     @PostConstruct
     public void init() {
         var facesContext = FacesContext.getCurrentInstance();
+        participante = new Participante();
         eventoId = Long.valueOf(facesContext.getExternalContext().getRequestParameterMap().get("id"));
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
+
+        if (participantesDto == null || participantesDto.isEmpty())
+            participantesDto.add(participanteDto);
+
     }
 
     public void salvar() {

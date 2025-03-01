@@ -31,7 +31,7 @@ public class Participante implements Serializable {
     private String cpf;
 
     @Column(name = "evento_id")
-    private String eventoId;
+    private Long eventoId;
 
     /**
      *N pessoas podem ou não estar em 1 evento.

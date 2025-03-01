@@ -59,13 +59,18 @@
                 constraintName="fk_presenca_participante"
                 baseTableName="presenca"
                 baseColumnNames="participante_id" referencedTableName="participante"
-                referencedColumnNames="participante_id" onDelete="CASCADE"
-        />
+                referencedColumnNames="participante_id" onDelete="CASCADE"/>
         <addForeignKeyConstraint
                 constraintName="fk_participante_evento"
                 baseTableName="participante"
                 baseColumnNames="evento_id" referencedTableName="evento"
-                referencedColumnNames="evento_id" onDelete="CASCADE"
-        />
+                referencedColumnNames="evento_id" onDelete="CASCADE"/>
     </changeSet>
+
+    <changeSet id="02" author="EG"
+               labels="alterando dado String para long">
+        <modifyDataType tableName="participante" columnName="evento_id"
+                        newDataType="BIGINT"/>
+    </changeSet>
+
 </databaseChangeLog>

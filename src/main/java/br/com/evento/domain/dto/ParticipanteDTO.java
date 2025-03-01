@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,7 +23,20 @@ public class ParticipanteDTO implements Serializable {
     private String porcentagem;
 
     public static List<ParticipanteDTO> toDTO(List<Participante> participantes) {
+        var participanteDTOList = new ArrayList<ParticipanteDTO>();
 
-        return null;
+        for (var participante : participantes) {
+            var participanteDTO = new ParticipanteDTO();
+
+            participanteDTO.setId(participante.getId());
+            participanteDTO.setEventoId(participante.getEvento().getId());
+            participanteDTO.setNome(participante.getNome());
+            participanteDTO.setCpf(participante.getCpf());
+            participanteDTO.setEmail(participante.getEmail());
+
+            participanteDTOList.add(participanteDTO);
+        }
+
+        return participanteDTOList;
     }
 }
