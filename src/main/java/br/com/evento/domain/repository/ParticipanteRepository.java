@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ParticipanteRepository extends SimpleJpaRepository<Participante, Long> {
@@ -45,5 +46,17 @@ public class ParticipanteRepository extends SimpleJpaRepository<Participante, Lo
         qryResult.setParameter("participanteId", participanteId);
 
         return qryResult.getSingleResult();
+    }
+
+    public List<Participante> findByCpf(String cpf) {
+        var qry = new StringBuilder();
+
+        qry.append("FROM Participante p ");
+        qry.append("WHERE p.cpf = :cpf ");
+
+        var qryResult = em.createQuery(qry.toString(), Participante.class);
+        qryResult.setParameter("cpf", cpf);
+
+        return qryResult.getResultList();
     }
 }

@@ -66,7 +66,7 @@ public class ParticipanteMBean implements Serializable {
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
     }
 
-    public void salvar() {
+    public void salvarParticipante() {
         try {
             if (participante.getId() == null) {
                 participante = participanteService.salvar(eventoId, participante);
@@ -125,5 +125,9 @@ public class ParticipanteMBean implements Serializable {
     public void adicionarMensagem(FacesMessage.Severity severity, String titulo, String detalhe) {
         FacesMessage message = new FacesMessage(severity, titulo, detalhe);
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void novoParticipante() {
+        this.participante = new Participante();
     }
 }

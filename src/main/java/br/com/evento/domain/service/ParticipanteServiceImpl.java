@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 //TODO: Muita utilizagem do eventoId de forma não performática, avaliar melhor solução
@@ -44,14 +43,15 @@ public class ParticipanteServiceImpl implements ParticipanteService {
         //verificação de CPF
         if (participantes != null && !participantes.isEmpty()) {
             for (var part : participantes) {
-                if (part.getId() != participante.getId()) {
-                    if (part.getCpf().equals(participante.getCpf()))
-                        throw new BusinessException("CPF inválido.");
+                if (!part.getId().equals(participante.getId())) {
+                    if (eventoId.equals(part.getEventoId())) {
+                        if (part.getCpf().equals(participante.getCpf()))
+                            throw new BusinessException("CPF inválido.");
 
-                    if (part.getEmail().equals(participante.getEmail()))
-                        throw new BusinessException("E-mail inválido.");
+                        if (part.getEmail().equals(participante.getEmail()))
+                            throw new BusinessException("E-mail inválido.");
+                    }
                 }
-
             }
         }
 
@@ -116,9 +116,14 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     public Participante salvarPresenca(Long eventoId, Long participanteId, Presenca presenca, boolean edicao) {
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+        //find por Id
+        var participante = participanteRepository.findById(participanteId)
+                .orElseThrow(() -> new BusinessException(MSG_NOT_FOUND));
+
+        //ver se existe mais algum com o mesmo CPF em outro evento
+        var participantes = participanteRepository.findByCpf(participante.getCpf());
         var evento = eventoRepository.findById(eventoId).orElseThrow();
         var presencasByEvento = presencaRepository.findTodosByEvento(evento.getId());
-        var participante = participanteRepository.findById(participanteId).orElseThrow();
         var presencasByParticipante = presencaRepository.findTodosByParticipante(participante.getId());
 
         var dataPresenca = presenca.getDataPresenca();
@@ -139,13 +144,15 @@ public class ParticipanteServiceImpl implements ParticipanteService {
             }
         }
 
-        //comparo se já existe alguma presença daquele participante nesse evento com a mesma data e se é eventos diff
-        if (presencasByParticipante != null && !presencasByParticipante.isEmpty()) {
-            for (var prsnc : presencasByParticipante) {
-                if (prsnc.getDataPresenca().equals(presenca.getDataPresenca()) &&
-                        !prsnc.getEventoId().equals(participante.getId())) {
-                    throw new BusinessException(
-                            "Já existe uma presença com esse participante em outro evento com essa mesma data.");
+        //se já tem uma lista de participates com o mesmo CPF em outros eventos
+        if (participantes != null && !participantes.isEmpty()) {
+            for (var part : participantes) {
+                if (!part.getEventoId().equals(evento.getId())) {
+                    for (var pre : part.getPresencas()) {
+                        if (pre.getDataPresenca().equals(presenca.getDataPresenca()))
+                            throw new BusinessException(
+                                    "Já foi registrado no mesmo dia, mas em evento diferente.");
+                    }
                 }
             }
         }

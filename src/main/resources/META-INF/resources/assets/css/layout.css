@@ -102,43 +102,17 @@
     margin-top: 2%;
 }
 
-.save-button, .home-save-button,
-.search-button  {
-    background: blue !important;
-    border: 1px solid black !important;
+.save-button, .search-button  {
+    background: #2196f3 !important;
+    border: 1px solid #2196f3 !important;
     border-radius: 70% !important;
     color: white !important;
     box-shadow: none !important;
     display: block !important;
 }
 
-.save-button {
-    width: 20%;
-    padding: 0.5% 2% !important;
-    margin: 0 auto !important;
-}
-
-body .back-button {
-    border: none;
-    box-shadow: none;
-    outline: none;
-    background: white;
-    color: black;
-    width: 20%;
-    padding: 0.5% 2%;
-    margin: 0 auto;
-}
-
 .save-button:hover {
     background: white !important;
-}
-
-.home-save-button {
-    width: 10%;
-}
-
-.search-button {
-    width: 50%;
 }
 
 .filter-section {
@@ -159,10 +133,6 @@ body .back-button {
     display: flex;
     align-items: center;
     gap: 0.8%;
-}
-
-.filter-input {
-    width: 50%;
 }
 
 .search-button {
@@ -207,4 +177,11 @@ body .back-button {
     align-items: flex-start;
     font-weight: bolder;
     margin-bottom: 1%;
+}
+
+.ui-button-text .ui-c {
+    display: block;
+}
+.p-datepicker .ui-calendar .filter-input {
+    width: 65%;
 }
