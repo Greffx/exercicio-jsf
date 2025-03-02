@@ -104,10 +104,10 @@
 
 .save-button, .home-save-button,
 .search-button  {
-    background: white !important;
+    background: blue !important;
     border: 1px solid black !important;
-    border-radius: 0 !important;
-    color: black !important;
+    border-radius: 70% !important;
+    color: white !important;
     box-shadow: none !important;
     display: block !important;
 }
@@ -119,9 +119,9 @@
 }
 
 body .back-button {
-    border: none;;
+    border: none;
     box-shadow: none;
-    outline: none;;
+    outline: none;
     background: white;
     color: black;
     width: 20%;
@@ -162,7 +162,7 @@ body .back-button {
 }
 
 .filter-input {
-    width: 15%;
+    width: 50%;
 }
 
 .search-button {
@@ -184,6 +184,7 @@ body .back-button {
 }
 
 .event-table td {
+    outline: none;
     padding: 2%;
     border-bottom: 1px solid #eee;
 }
@@ -193,7 +194,17 @@ body .back-button {
     margin-top: 2%;
 }
 
-
 .head-text {
     text-align: center;
+}
+
+/*MODAL DA PRESENCA*/
+.form-presenca {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    font-weight: bolder;
+    margin-bottom: 1%;
 }

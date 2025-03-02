@@ -90,11 +90,35 @@
                         </p:column>
 
                         <p:column headerText="% participação">
-                            <h:outputText value="#{participanteDto.porcentagem}"/>
+                            <h:outputText value="#{participanteDto.porcentagem}%"/>
                         </p:column>
 
                         <p:column headerText="Adc. presença">
-                            <h:outputText value="#{participanteDto.id}"/>
+                            <!-- Show add presence button when no presence exists -->
+                            <p:commandButton rendered="#{participanteDto.presencaId == null}"
+                                             icon="pi pi-check-circle"
+                                             action="#{participanteMBean.buscarPorId}"
+                                             oncomplete="PF('presencaDialog').show();"
+                                             update=":eventoForm:tabView:tabela-participante :messages :presencaDialog"
+
+                                             process="@this"
+                                             styleClass="ui-button-success"
+                                             style="width:30%;">
+                                <f:setPropertyActionListener target="#{participanteMBean.participanteId}"
+                                                             value="#{participanteDto.id}" />
+                            </p:commandButton>
+
+                            <p:commandButton rendered="#{participanteDto.presencaId != null}"
+                                             icon="pi pi-trash"
+                                             action="#{participanteMBean.deletarPresenca(participanteDto.presencaId)}"
+                                             update=":eventoForm:tabView:tabela-participante :messages :presencaDialog"
+                                             process="@this"
+                                             styleClass="ui-button-danger"
+                                             style="width:30%;">
+                                <p:confirm type="popup" header="Confirmação"
+                                           message="Tem certeza que deseja excluir esta presença?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
                         </p:column>
 
                         <p:column>
@@ -136,7 +160,7 @@
 
                 <div class="form-field">
                     <h:outputLabel for="nomeParticipante" value="Nome:"/>
-                    <p:inputText styleClass="" id="nomeParticipante"
+                    <p:inputText styleClass="input-modal" id="nomeParticipante"
                                  value="#{participanteMBean.participante.nome}"
                                  required="true"
                                  requiredMessage="Nome é obrigatório"/>
@@ -168,9 +192,48 @@
                                      PF('participanteDialog').hide();
                                      PF('tabViewWidget').select(1);
                                  }"
-                                 process="@form">
-                </p:commandButton>
+                                 process="@form"/>
             </h:form>
+        </p:dialog>
+
+        <p:dialog id="presencaDialog" widgetVar="presencaDialog" header="Cadastrar Presença"
+                  modal="true" resizable="false" width="45%" appendTo="@(body)">
+            <h:form id="presencaForm">
+                <p:messages id="messagesPresenca" showDetail="true" showSummary="false" closable="true"/>
+
+                <div class="form-presenca">
+                    <h:outputLabel for="nomeParticipante" value="#{participanteMBean.participante.nome}"/>
+                </div>
+
+                <div class="form-presenca">
+                    <h:outputLabel for="cpfParticipante" value="#{participanteMBean.participante.cpf}"
+                                   style="margin-bottom: 3%;"/>
+                </div>
+
+                <div class="form-presenca">
+                    <h:outputLabel for="dataPresenca" value="Data: *"/>
+                    <p:calendar id="dataPresenca"
+                                styleClass="form-presenca"
+                                value="#{participanteMBean.presenca.dataPresenca}"
+                                required="true"
+                                requiredMessage="Data da presença é obrigatória."
+                                pattern="dd/MM/yyyy"/>
+                    <p:message for="dataPresenca"/>
+                </div>
+
+                <div class="form-presenca">
+                    <h:outputLabel for="porcentagem" value="Quanto voce ir?(0 a 100)"/>
+                    <h:inputText id="porcentagem" value="#{participanteMBean.presenca.porcentagem}"/>
+                </div>
+
+                <p:commandButton value="Salvar" icon="pi pi-check"
+                                 styleClass="save-button"
+                                 action="#{participanteMBean.adicionarPresenca()}"
+                                 update=":eventoForm:tabView:tabela-participante
+                                 :messages presencaForm:messagesPresenca"
+                                 process="@form"/>
+            </h:form>
+
         </p:dialog>
     </div>
 </h:body>

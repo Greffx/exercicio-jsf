@@ -73,4 +73,21 @@
                         newDataType="BIGINT"/>
     </changeSet>
 
+    <changeSet id="03" author="EG"
+               labels="adicionando mais uma column para ser a % de ida">
+        <addColumn tableName="presenca">
+            <column name="porcentagem" type="INT"/>
+        </addColumn>
+
+        <addColumn tableName="presenca">
+            <column name="evento_id" type="BIGINT"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                constraintName="fk_presenca_evento"
+                baseTableName="presenca"
+                baseColumnNames="evento_id" referencedTableName="evento"
+                referencedColumnNames="evento_id" onDelete="CASCADE"/>
+    </changeSet>
+
 </databaseChangeLog>

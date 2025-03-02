@@ -2,12 +2,17 @@ package br.com.evento.domain.service;
 
 import br.com.evento.domain.exception.BusinessException;
 import br.com.evento.domain.model.Participante;
+import br.com.evento.domain.model.Presenca;
+import br.com.evento.domain.repository.EventoRepository;
 import br.com.evento.domain.repository.ParticipanteRepository;
+import br.com.evento.domain.repository.PresencaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 //TODO: Muita utilizagem do eventoId de forma não performática, avaliar melhor solução
@@ -17,6 +22,13 @@ public class ParticipanteServiceImpl implements ParticipanteService {
 
     @Autowired
     private ParticipanteRepository participanteRepository;
+
+    @Autowired
+    private PresencaRepository presencaRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
+
 
     private static final String MSG_NOT_FOUND =
             "Participante não encontrado com esse ID.";
@@ -77,7 +89,14 @@ public class ParticipanteServiceImpl implements ParticipanteService {
 
     @Override
     public List<Participante> listar(Long eventoId) {
-        return participanteRepository.findByEvento(eventoId);
+        var participantes = participanteRepository.findByEvento(eventoId);
+
+        for (var participante : participantes) {
+            participante.setPresencas(
+                    presencaRepository.findTodosByParticipante(participante.getId()));
+        }
+
+        return participantes;
     }
 
     @Transactional
@@ -90,5 +109,65 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     @Override
     public Participante findParticipanteByEventoId(Long eventoId, Long participanteId) {
         return participanteRepository.findParticipanteByEventoId(eventoId, participanteId);
+    }
+
+    @Transactional
+    @Override
+    public Participante salvarPresenca(Long eventoId, Long participanteId, Presenca presenca, boolean edicao) {
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        var evento = eventoRepository.findById(eventoId).orElseThrow();
+        var presencasByEvento = presencaRepository.findTodosByEvento(evento.getId());
+        var participante = participanteRepository.findById(participanteId).orElseThrow();
+        var presencasByParticipante = presencaRepository.findTodosByParticipante(participante.getId());
+
+        var dataPresenca = presenca.getDataPresenca();
+
+        //para ver se a data ta dentro da validação
+        if (dataPresenca.isBefore(evento.getDataInicial()) ||
+                dataPresenca.isAfter(evento.getDataFim())) {
+            throw new BusinessException("Data precisa ser estar entre " +
+                    formatador.format(evento.getDataInicial()) + " e " + formatador.format(evento.getDataFim()));
+        }
+
+        //comparo se já existe alguma presença daquele participante nesse evento
+        if (presencasByEvento != null && !presencasByEvento.isEmpty()) {
+            for (var prsnc : presencasByEvento) {
+                if (prsnc.getParticipanteId().equals(participante.getId()) && !edicao) {
+                    throw new BusinessException("Já existe um presenca com esse participante.");
+                }
+            }
+        }
+
+        //comparo se já existe alguma presença daquele participante nesse evento com a mesma data e se é eventos diff
+        if (presencasByParticipante != null && !presencasByParticipante.isEmpty()) {
+            for (var prsnc : presencasByParticipante) {
+                if (prsnc.getDataPresenca().equals(presenca.getDataPresenca()) &&
+                        !prsnc.getEventoId().equals(participante.getId())) {
+                    throw new BusinessException(
+                            "Já existe uma presença com esse participante em outro evento com essa mesma data.");
+                }
+            }
+        }
+
+        presenca.setParticipanteId(participanteId);
+        presenca.setEventoId(eventoId);
+
+        presencaRepository.save(presenca);
+
+        return participante;
+    }
+
+    @Transactional
+    @Override
+    public void excluirPresenca(Long presencaId) {
+        var presenca = presencaRepository.findById(presencaId).orElseThrow(() ->
+                new BusinessException("Presença não encontrada com esse ID."));
+        try {
+            presencaRepository.delete(presenca);
+
+        } catch (DataIntegrityViolationException exc) {
+            throw new BusinessException(exc.getMessage());
+        }
     }
 }

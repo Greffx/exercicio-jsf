@@ -37,11 +37,12 @@ public class Participante implements Serializable {
     /**
      *N pessoas podem ou não estar em 1 evento.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evento_id",
             referencedColumnName = "evento_id", insertable = false, updatable = false)
     private Evento evento;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "participante")
     private List<Presenca> presencas = new ArrayList<>();
 }
