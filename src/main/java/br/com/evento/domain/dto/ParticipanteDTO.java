@@ -29,7 +29,7 @@ public class ParticipanteDTO implements Serializable {
             var participanteDTO = new ParticipanteDTO();
 
             participanteDTO.setId(participante.getId());
-            participanteDTO.setEventoId(participante.getEvento().getId());
+            participanteDTO.setEventoId(participante.getEventoId());
             participanteDTO.setNome(participante.getNome());
             participanteDTO.setCpf(participante.getCpf());
             participanteDTO.setEmail(participante.getEmail());

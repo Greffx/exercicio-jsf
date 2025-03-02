@@ -79,6 +79,7 @@
                 <p:column>
                     <p:button icon="pi pi-pencil"
                               outcome="/pages/cadastrarEvento.xhtml?faces-redirect=true"
+                              target="_blank"
                               style="margin-right: 2%;">
 
                         <f:param name="id" value="#{eventoDto.id}"/>
@@ -97,7 +98,6 @@
                 </p:column>
             </p:dataTable>
 
-            <!--global-->
             <p:confirmPopup global="true">
                 <p:commandButton value="Não" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
                 <p:commandButton value="Sim" type="button" styleClass="ui-confirm-popup-yes" />

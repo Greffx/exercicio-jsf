@@ -32,7 +32,7 @@ public class ParticipanteMBean implements Serializable {
     private ParticipanteService participanteService;
 
     private Participante participante;
-    private List<ParticipanteDTO> participantesDto = new ArrayList<>();
+    private List<ParticipanteDTO> participantesDto;
     private Long eventoId;
     private ParticipanteDTO participanteDto;
 
@@ -46,28 +46,22 @@ public class ParticipanteMBean implements Serializable {
             eventoId = Long.valueOf(idParam);
 
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
-
-        if (participantesDto == null || participantesDto.isEmpty())
-            participantesDto.add(participanteDto);
-
     }
 
     public void salvar() {
         try {
             if (participante.getId() == null) {
                 participante = participanteService.salvar(eventoId, participante);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
-                                "Participante cadastrado com sucesso!"));
+                this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso",
+                        "Participante criado com sucesso!");
             } else {
                 participante = participanteService.editar(participante.getId(), participante);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
-                                "Evento atualizado com sucesso!"));
+                this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso",
+                        "Participante atualizado com sucesso!");
             }
         } catch (BusinessException exc) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", exc.getMessage()));
+            this.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Error",
+                    exc.getMessage());
         }
 
         listar(eventoId);
@@ -77,4 +71,14 @@ public class ParticipanteMBean implements Serializable {
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
     }
 
+    public void deletar(Long id) {
+        participanteService.excluir(id);
+        listar(eventoId);
+        this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Confirmado", "Excluído com sucesso");
+    }
+
+    public void adicionarMensagem(FacesMessage.Severity severity, String titulo, String detalhe) {
+        FacesMessage message = new FacesMessage(severity, titulo, detalhe);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 }

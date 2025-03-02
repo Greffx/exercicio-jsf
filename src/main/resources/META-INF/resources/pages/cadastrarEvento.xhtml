@@ -12,6 +12,7 @@
 <h:body>
     <div class="container">
         <div class="header">Detalhes Evento</div>
+        <p:growl id="messages" showDetail="true" showSummary="false" life="3000" />
 
         <h:form id="eventoForm">
             <p:tabView id="tabView" widgetVar="tabViewWidget" dynamic="true">
@@ -70,7 +71,7 @@
                                      type="button"
                                      process="@this"/>
 
-                    <p:dataTable id="tabela-eventos"
+                    <p:dataTable id="tabela-participante"
                                  value="#{participanteMBean.participantesDto}"
                                  var="participanteDto"
                                  styleClass="event-table"
@@ -103,9 +104,10 @@
                             </p:button>
 
                             <p:commandButton icon="pi pi-trash" title="Excluir"
-                                             action="#{eventoMBean.deletar(participanteDto.id)}"
-                                             update="tabela-eventos"
-                                             styleClass="ui-button-danger">
+                                             action="#{participanteMBean.deletar(participanteDto.id)}"
+                                             update="tabela-participante messages"
+                                             styleClass="ui-button-danger"
+                                             process="@this">
 
                                 <p:confirm type="popup" header="Confirmação"
                                            message="Tem certeza que deseja excluir?"
@@ -115,20 +117,24 @@
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
+
+            <p:confirmPopup global="true">
+                <p:commandButton value="Não" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirm-popup-yes" />
+            </p:confirmPopup>
         </h:form>
 
-        <p:growl id="messages" showDetail="true" life="3000" />
         <p:dialog id="participanteDialog" widgetVar="participanteDialog" header="Cadastrar Participante"
                   modal="true" resizable="false" width="45%" appendTo="@(body)">
             <h:form id="participanteForm">
-                <p:messages id="messagesParticipante" showDetail="true" closable="true"/>
+                <p:messages id="messagesParticipante" showDetail="true" showSummary="false" closable="true"/>
 
                 <div class="form-field">
                     <h:outputLabel for="nomeParticipante" value="Nome:"/>
                     <p:inputText styleClass="" id="nomeParticipante"
                                  value="#{participanteMBean.participante.nome}"
                                  required="true"
-                                 requiredMessage="gNome é obrigatório"/>
+                                 requiredMessage="Nome é obrigatório"/>
                 </div>
 
                 <div class="form-field">
@@ -151,9 +157,14 @@
                 <p:commandButton value="Salvar" icon="pi pi-check"
                                  styleClass="save-button"
                                  action="#{participanteMBean.salvar()}"
-                                 update=":eventoForm:tabView:tabela-eventos messagesParticipante"
-                                 oncomplete="if(!args.validationFailed) PF('participanteDialog').hide();"
-                                 process="@form"/>
+                                 update=":eventoForm:tabView:tabela-participante :messages
+                                 participanteForm:messagesParticipante"
+                                 oncomplete="if(!args.validationFailed) {
+                                     PF('participanteDialog').hide();
+                                     PF('tabViewWidget').select(1);
+                                 }"
+                                 process="@form">
+                </p:commandButton>
             </h:form>
         </p:dialog>
     </div>

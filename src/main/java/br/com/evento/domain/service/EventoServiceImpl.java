@@ -30,7 +30,7 @@ public class EventoServiceImpl implements EventoService {
                 evento.getDataFim().isBefore(LocalDate.now()) ||
                 evento.getDataFim().isBefore(evento.getDataInicial())) {
             throw new BusinessException("Erro ao salvar evento, verificar a data inicial e data fim.");
-        } else if (evento.getNome() == null || evento.getNome().isEmpty()) {
+        } else if (evento.getNome().isEmpty()) {
             throw new BusinessException("Erro ao salvar evento, verificar o nome do evento.");
         }
 

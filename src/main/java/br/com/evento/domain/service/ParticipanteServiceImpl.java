@@ -1,7 +1,6 @@
 package br.com.evento.domain.service;
 
 import br.com.evento.domain.exception.BusinessException;
-import br.com.evento.domain.model.Evento;
 import br.com.evento.domain.model.Participante;
 import br.com.evento.domain.repository.ParticipanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,31 +23,24 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     @Transactional
     @Override
     public Participante salvar(Long eventoId, Participante participante) {
-        if (participante.getNome() == null) {
-            throw new BusinessException("Nome obrigatório.");
-        }
-
-        if (participante.getCpf() == null) {
-            throw new BusinessException("CPF obrigatório.");
-        }
-
-        if (participante.getEmail() == null) {
-            throw new BusinessException("E-mail obrigatório.");
-        }
-
         participante.setEventoId(eventoId);
         var participantes = participanteRepository.findByEvento(eventoId);
 
         //verificação de CPF
         if (participantes != null && !participantes.isEmpty()) {
-            for (var part : participantes)
+            for (var part : participantes) {
                 if (part.getCpf().equals(participante.getCpf()))
                     throw new BusinessException("CPF inválido.");
+
+                if (part.getEmail().equals(participante.getEmail()))
+                    throw new BusinessException("E-mail inválido.");
+            }
         }
 
         return participanteRepository.save(participante);
     }
 
+    @Transactional
     @Override
     public boolean excluir(Long id) {
         var participante = this.buscarPorId(id);
