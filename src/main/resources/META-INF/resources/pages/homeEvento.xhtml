@@ -11,6 +11,8 @@
 <h:body>
     <div class="container-home">
         <h:form id="form">
+            <p:growl id="message" showDetail="true"/>
+
             <!-- Cabeçalho -->
             <div class="nav-header">
                 <h1>Eventos</h1>
@@ -84,11 +86,22 @@
 
                     <p:commandButton icon="pi pi-trash" title="Excluir"
                                      action="#{eventoMBean.deletar(eventoDto.id)}"
-                                     update="tabela-eventos"
+                                     update="tabela-eventos message"
                                      styleClass="ui-button-danger"
-                                     onclick="return confirm('Tem certeza que deseja excluir este evento?');"/>
+                                     process="@this">
+
+                        <p:confirm type="popup" header="Confirmação"
+                                   message="Tem certeza que deseja excluir?"
+                                   icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
+
+            <!--global-->
+            <p:confirmPopup global="true">
+                <p:commandButton value="Não" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirm-popup-yes" />
+            </p:confirmPopup>
         </h:form>
     </div>
 </h:body>

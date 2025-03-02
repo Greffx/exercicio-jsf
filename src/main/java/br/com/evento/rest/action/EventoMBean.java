@@ -50,18 +50,15 @@ public class EventoMBean implements Serializable {
         try {
             if (evento.getId() == null) {
                 evento = eventoService.salvar(evento);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
-                                "Evento cadastrado com sucesso!"));
+                this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso",
+                        "Evento criado com sucesso!");
             } else {
                 evento = eventoService.editar(evento.getId(), evento);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
-                                "Evento atualizado com sucesso!"));
+                this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso",
+                        "Evento atualizado com sucesso!");
             }
         } catch (BusinessException exc) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", exc.getMessage()));
+            this.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Error", exc.getMessage());
         }
     }
 
@@ -73,6 +70,11 @@ public class EventoMBean implements Serializable {
     public void deletar(Long id) {
         eventoService.excluir(id);
         listar();
+        this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Confirmado", "Excluído com sucesso");
     }
 
+    public void adicionarMensagem(FacesMessage.Severity severity, String titulo, String detalhe) {
+        FacesMessage message = new FacesMessage(severity, titulo, detalhe);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 }

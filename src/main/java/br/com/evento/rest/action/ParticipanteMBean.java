@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: depois pegar o context do JSF e deiaxr msg generics, com method justamente pra isso
 @Getter
 @Setter
 @ViewScoped
@@ -39,7 +40,11 @@ public class ParticipanteMBean implements Serializable {
     public void init() {
         var facesContext = FacesContext.getCurrentInstance();
         participante = new Participante();
-        eventoId = Long.valueOf(facesContext.getExternalContext().getRequestParameterMap().get("id"));
+        var idParam = facesContext.getExternalContext().getRequestParameterMap().get("id");
+
+        if (idParam != null)
+            eventoId = Long.valueOf(idParam);
+
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
 
         if (participantesDto == null || participantesDto.isEmpty())
@@ -53,7 +58,7 @@ public class ParticipanteMBean implements Serializable {
                 participante = participanteService.salvar(eventoId, participante);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
-                                "Evento cadastrado com sucesso!"));
+                                "Participante cadastrado com sucesso!"));
             } else {
                 participante = participanteService.editar(participante.getId(), participante);
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -65,6 +70,7 @@ public class ParticipanteMBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", exc.getMessage()));
         }
 
+        listar(eventoId);
     }
 
     public void listar(Long eventoId) {

@@ -14,8 +14,6 @@
         <div class="header">Detalhes Evento</div>
 
         <h:form id="eventoForm">
-            <p:messages id="messages" showDetail="true" closable="true"/>
-
             <p:tabView id="tabView" widgetVar="tabViewWidget" dynamic="true">
                 <p:tab title="Dados Evento" id="dadosTab">
                     <div class="form-field">
@@ -107,14 +105,19 @@
                             <p:commandButton icon="pi pi-trash" title="Excluir"
                                              action="#{eventoMBean.deletar(participanteDto.id)}"
                                              update="tabela-eventos"
-                                             styleClass="ui-button-danger"
-                                             onclick="return confirm('Tem certeza que deseja excluir este evento?');"/>
+                                             styleClass="ui-button-danger">
+
+                                <p:confirm type="popup" header="Confirmação"
+                                           message="Tem certeza que deseja excluir?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
                         </p:column>
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
         </h:form>
 
+        <p:growl id="messages" showDetail="true" life="3000" />
         <p:dialog id="participanteDialog" widgetVar="participanteDialog" header="Cadastrar Participante"
                   modal="true" resizable="false" width="45%" appendTo="@(body)">
             <h:form id="participanteForm">
@@ -125,7 +128,7 @@
                     <p:inputText styleClass="" id="nomeParticipante"
                                  value="#{participanteMBean.participante.nome}"
                                  required="true"
-                                 requiredMessage="Nome é obrigatório"/>
+                                 requiredMessage="gNome é obrigatório"/>
                 </div>
 
                 <div class="form-field">
