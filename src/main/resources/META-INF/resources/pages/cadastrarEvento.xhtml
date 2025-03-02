@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
     <title>Detalhes Evento</title>
@@ -98,10 +98,15 @@
                         </p:column>
 
                         <p:column>
-                            <p:button icon="pi pi-pencil"
-                                      outcome="/pages/cadastrarEvento.xhtml?faces-redirect=true"
-                                      style="margin-right: 2%;">
-                            </p:button>
+                            <p:commandButton icon="pi pi-pencil"
+                                             action="#{participanteMBean.buscarPorId}"
+                                             oncomplete="PF('participanteDialog').show(); PF('tabViewWidget').select(1);"
+                                             update="tabela-eventos messages participanteDialog"
+                                             process="@this"
+                                             style="margin-right: 2%;">
+                                <f:setPropertyActionListener target="#{participanteMBean.participanteId}"
+                                                             value="#{participanteDto.id}" />
+                            </p:commandButton>
 
                             <p:commandButton icon="pi pi-trash" title="Excluir"
                                              action="#{participanteMBean.deletar(participanteDto.id)}"

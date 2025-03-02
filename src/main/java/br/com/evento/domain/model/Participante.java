@@ -1,5 +1,6 @@
 package br.com.evento.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -36,7 +37,7 @@ public class Participante implements Serializable {
     /**
      *N pessoas podem ou não estar em 1 evento.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "evento_id",
             referencedColumnName = "evento_id", insertable = false, updatable = false)
     private Evento evento;

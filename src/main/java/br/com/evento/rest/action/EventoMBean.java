@@ -35,7 +35,7 @@ public class EventoMBean implements Serializable {
     @PostConstruct
     public void init() {
         var facesContext = FacesContext.getCurrentInstance();
-        var idParam = facesContext.getExternalContext().getRequestParameterMap().get("id");
+        var idParam = facesContext.getExternalContext().getRequestParameterMap().get("idEvento");
 
         if (idParam != null) {
             var id = Long.valueOf(idParam);

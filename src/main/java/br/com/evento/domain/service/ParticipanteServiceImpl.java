@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//TODO: Muita utilizagem do eventoId de forma não performática, avaliar melhor solução
 @Service
 @Transactional(readOnly = true)
 public class ParticipanteServiceImpl implements ParticipanteService {
@@ -23,17 +24,22 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     @Transactional
     @Override
     public Participante salvar(Long eventoId, Participante participante) {
-        participante.setEventoId(eventoId);
+        if (participante.getEventoId() == null)
+            participante.setEventoId(eventoId);
+
         var participantes = participanteRepository.findByEvento(eventoId);
 
         //verificação de CPF
         if (participantes != null && !participantes.isEmpty()) {
             for (var part : participantes) {
-                if (part.getCpf().equals(participante.getCpf()))
-                    throw new BusinessException("CPF inválido.");
+                if (part.getId() != participante.getId()) {
+                    if (part.getCpf().equals(participante.getCpf()))
+                        throw new BusinessException("CPF inválido.");
 
-                if (part.getEmail().equals(participante.getEmail()))
-                    throw new BusinessException("E-mail inválido.");
+                    if (part.getEmail().equals(participante.getEmail()))
+                        throw new BusinessException("E-mail inválido.");
+                }
+
             }
         }
 
@@ -43,7 +49,7 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     @Transactional
     @Override
     public boolean excluir(Long id) {
-        var participante = this.buscarPorId(id);
+        var participante = this.buscarTodosPorEventoId(id);
 
         try {
             participanteRepository.delete(participante);
@@ -58,8 +64,15 @@ public class ParticipanteServiceImpl implements ParticipanteService {
     }
 
     @Override
-    public Participante editar(Long id, Participante participanteNovo) {
-        return null;
+    public Participante editar(Long eventoId, Long participanteId, Participante participanteNovo) {
+        var participanteAtual = participanteRepository.findById(participanteId)
+                .orElseThrow(() -> new BusinessException(MSG_NOT_FOUND));
+
+        participanteAtual.setNome(participanteNovo.getNome());
+        participanteAtual.setCpf(participanteNovo.getCpf());
+        participanteAtual.setEmail(participanteNovo.getEmail());
+
+        return this.salvar(eventoId, participanteAtual);
     }
 
     @Override
@@ -67,9 +80,15 @@ public class ParticipanteServiceImpl implements ParticipanteService {
         return participanteRepository.findByEvento(eventoId);
     }
 
+    @Transactional
     @Override
-    public Participante buscarPorId(Long id) {
+    public Participante buscarTodosPorEventoId(Long id) {
         return participanteRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(MSG_NOT_FOUND));
+    }
+
+    @Override
+    public Participante findParticipanteByEventoId(Long eventoId, Long participanteId) {
+        return participanteRepository.findParticipanteByEventoId(eventoId, participanteId);
     }
 }

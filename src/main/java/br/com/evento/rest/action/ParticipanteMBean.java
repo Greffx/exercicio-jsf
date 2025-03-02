@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 //TODO: depois pegar o context do JSF e deiaxr msg generics, com method justamente pra isso
@@ -34,16 +33,21 @@ public class ParticipanteMBean implements Serializable {
     private Participante participante;
     private List<ParticipanteDTO> participantesDto;
     private Long eventoId;
+    private Long participanteId;
     private ParticipanteDTO participanteDto;
 
     @PostConstruct
     public void init() {
         var facesContext = FacesContext.getCurrentInstance();
         participante = new Participante();
-        var idParam = facesContext.getExternalContext().getRequestParameterMap().get("id");
+        var ParamEventoId = facesContext.getExternalContext().getRequestParameterMap().get("idEvento");
+        var ParamParticipanteId = facesContext.getExternalContext().getRequestParameterMap().get("idParticipante");
 
-        if (idParam != null)
-            eventoId = Long.valueOf(idParam);
+        if (ParamEventoId != null)
+            eventoId = Long.valueOf(ParamEventoId);
+
+        if (ParamParticipanteId != null)
+            participanteId = Long.valueOf(ParamParticipanteId);
 
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
     }
@@ -55,7 +59,7 @@ public class ParticipanteMBean implements Serializable {
                 this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso",
                         "Participante criado com sucesso!");
             } else {
-                participante = participanteService.editar(participante.getId(), participante);
+                participante = participanteService.editar(eventoId, participante.getId(), participante);
                 this.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso",
                         "Participante atualizado com sucesso!");
             }
@@ -69,6 +73,10 @@ public class ParticipanteMBean implements Serializable {
 
     public void listar(Long eventoId) {
         participantesDto = ParticipanteDTO.toDTO(participanteService.listar(eventoId));
+    }
+
+    public void buscarPorId() {
+        participante = participanteService.findParticipanteByEventoId(eventoId, participanteId);
     }
 
     public void deletar(Long id) {

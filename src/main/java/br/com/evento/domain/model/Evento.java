@@ -1,8 +1,9 @@
 package br.com.evento.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Table
 @Entity
+@ToString(exclude = "participantes")
 public class Evento implements Serializable {
 
     @Serial
@@ -32,7 +34,7 @@ public class Evento implements Serializable {
     @Column(name = "data_fim", nullable = false)
     private LocalDate dataFim;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     @OneToMany(mappedBy = "evento")
     private List<Participante> participantes = new ArrayList<>();
 
