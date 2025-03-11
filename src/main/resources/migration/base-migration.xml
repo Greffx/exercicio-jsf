@@ -91,9 +91,9 @@
     </changeSet>
 
     <changeSet id="04" author="EG" labels="tirando a restrição de email/cpf de ser único">
-<!--        <dropUniqueConstraint-->
-<!--                tableName="participante"-->
-<!--                constraintName="participante_email_key"/>-->
+        <dropUniqueConstraint
+                tableName="participante"
+                constraintName="participante_email_key"/>
         <dropUniqueConstraint
                 tableName="participante"
                 constraintName="participante_cpf_key"/>
